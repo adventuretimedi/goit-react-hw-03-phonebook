@@ -17,6 +17,19 @@ class App extends Component {
     filter: '',
   };
 
+  // збережи в локал, якщо відбулися зміни, componentDidUpdate -слідкує за змінами
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+  // сходи в локал, якщо там щось є - запиши значення в стейт
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem('contacts'));
+    contacts && this.setState({ contacts: contacts });
+  }
+
   addContact = ({ name, number }) => {
     if (this.state.contacts.find(contact => contact.name === name)) {
       Notify.failure(`${name} is already in contacts`);
